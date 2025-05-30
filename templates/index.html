@@ -1,25 +1,56 @@
-{% extends 'base.html' %}
-{% block contenido %}
-<h1>Lista de Estudiantes</h1>
-<a href="{{ url_for('crear') }}" class="btn btn-primary mb-3">Nuevo Estudiante</a>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th><th>Nombre</th><th>Email</th><th>Acciones</th>
-        </tr>
+{% extends 'base.html' %} {% block contenido %}
+<h1 class="mb-4 text-primary text-center">Clima actual en 5 ciudades</h1>
+
+<div class="mb-3 text-center">
+  <a href="{{ url_for('actualizar') }}" class="btn btn-primary"
+    >Actualizar clima</a
+  >
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %} {% if messages
+%}
+<div class="container">
+  {% for category, message in messages %}
+  <div
+    class="alert alert-{{ category }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ message }}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Cerrar"
+    ></button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %} {% endwith %}
+
+<div class="table-responsive shadow rounded">
+  <table class="table table-striped table-hover align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>Ciudad</th>
+        <th>Temperatura (°C)</th>
+        <th>Sensación térmica (°C)</th>
+        <th>Humedad (%)</th>
+        <th>Descripción</th>
+        <th>Fecha y hora de consulta</th>
+      </tr>
     </thead>
     <tbody>
-        {% for est in estudiantes %}
-        <tr>
-            <td>{{ est.id }}</td>
-            <td>{{ est.nombre }}</td>
-            <td>{{ est.email }}</td>
-            <td>
-                <a href="{{ url_for('editar', id=est.id) }}" class="btn btn-warning btn-sm">Editar</a>
-                <a href="{{ url_for('eliminar', id=est.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar estudiante?');">Eliminar</a>
-            </td>
-        </tr>
-        {% endfor %}
+      {% for c in resultados %}
+      <tr>
+        <td><strong>{{ c.ciudad }}</strong></td>
+        <td>{{ "%.2f"|format(c.temperatura) }}</td>
+        <td>{{ "%.2f"|format(c.sensacion_termica) }}</td>
+        <td>{{ c.humedad }}</td>
+        <td class="text-capitalize">{{ c.descripcion }}</td>
+        <td>{{ c.fecha_consulta.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      </tr>
+      {% endfor %}
     </tbody>
-</table>
+  </table>
+</div>
 {% endblock %}

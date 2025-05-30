@@ -1,4 +1,10 @@
+# Ignorar entorno virtual
 env/
+
+# Ignorar archivos Python compilados
 *.pyc
 __pycache__/
-estudiantes.db
+
+# Ignorar archivos de base de datos SQLite (si los tuvieras)
+*.sqlite
+*.db
